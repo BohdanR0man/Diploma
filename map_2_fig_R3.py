@@ -178,8 +178,8 @@ class Reachability3D:
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-
-        for t in time_points:
+        colors = plt.cm.viridis(np.linspace(1, 0, len(time_points)))
+        for i, t in enumerate(time_points):
             support_vals_A = {
                 tuple(psi): self.support_function_R_A(t, psi) for psi in directions
             }
@@ -202,13 +202,13 @@ class Reachability3D:
             boundary_A = np.array([deformation_A * psi + self.center_R_A(t) for deformation_A, psi in zip(deformations_A, directions)])
             x_A, y_A, z_A = boundary_A[:, 0], boundary_A[:, 1], boundary_A[:, 2]
             t_A = np.full_like(x_A, t)
-            ax.scatter(x_A, y_A, z_A, color="green", alpha = 0.7, label=f't={t:.2f}')
+            ax.plot(x_A, y_A, z_A, color="lime", alpha = 0.4)
 
             deformations_B = deformation_function(shape_B, directions)
             boundary_B = np.array([deformation_B * psi + shape_B.get_center() for deformation_B, psi in zip(deformations_B, directions)])
             x_B, y_B, z_B = boundary_B[:, 0], boundary_B[:, 1], boundary_B[:, 2]
             t_B = np.full_like(x_B, t)
-            ax.plot(x_B, y_B, z_B, color="red", alpha = 0.7)
+            ax.scatter(x_B, y_B, z_B, color=[colors[i]], alpha = 0.7, label=f't={t:.2f}')
 
         ax.set_xlabel("x")
         ax.set_ylabel("y")
